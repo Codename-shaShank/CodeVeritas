@@ -33,6 +33,10 @@ const ACTIONS = {
     REQUEST_GENERATE: "request-generate",
     GENERATION_FAILED: "generation-failed",
     ANALYSIS_COMPLETE: "analysis-complete",
+    // Code execution pipeline actions
+    RUN_CODE: "run-code",
+    CODE_EXECUTION_STATUS: "code-execution-status",
+    CODE_EXECUTION_RESULT: "code-execution-result",
 }
 
 export default ACTIONS

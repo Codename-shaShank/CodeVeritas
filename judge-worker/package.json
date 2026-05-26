@@ -1,0 +1,19 @@
+{
+  "name": "codeveritas-judge-worker",
+  "version": "1.0.0",
+  "description": "Sandboxed code execution worker — Kafka consumer + Docker sandbox + Redis verdict relay",
+  "main": "worker.js",
+  "scripts": {
+    "start": "node worker.js",
+    "dev": "node --watch worker.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dockerode": "^4.0.4",
+    "ioredis": "^5.4.2",
+    "kafkajs": "^2.2.4",
+    "uuid": "^9.0.1"
+  }
+}

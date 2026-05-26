@@ -16,6 +16,9 @@ app.use(cors())
 
 const { Server } = require('socket.io')
 const axios = require('axios')
+const { Kafka, logLevel: kafkaLogLevel } = require('kafkajs')
+const Redis = require('ioredis')
+const { v4: uuidv4 } = require('uuid')
 
 const ML_AGENT_BASE_URL = process.env.ML_AGENT_URL || 'https://code-plag-fastapi.onrender.com'
 
@@ -92,6 +95,101 @@ mongoose
 	.connect(MONGO_URI)
 	.then(() => console.log('Connected to MongoDB'))
 	.catch((err) => console.error('MongoDB connection error', err))
+
+// ─────────────────────────────────────────────
+// Kafka + Redis Infrastructure (Code Execution Pipeline)
+// ─────────────────────────────────────────────
+
+const KAFKA_BROKERS = (process.env.KAFKA_BROKERS || 'localhost:9092').split(',')
+const REDIS_HOST = process.env.REDIS_HOST || 'localhost'
+const REDIS_PORT = parseInt(process.env.REDIS_PORT || '6379', 10)
+
+const kafkaInstance = new Kafka({
+	clientId: 'codeveritas-gateway',
+	brokers: KAFKA_BROKERS,
+	logLevel: kafkaLogLevel.WARN,
+	retry: { initialRetryTime: 1000, retries: 5 },
+})
+const kafkaProducer = kafkaInstance.producer()
+let kafkaReady = false
+
+const redisSubscriber = new Redis({
+	host: REDIS_HOST,
+	port: REDIS_PORT,
+	lazyConnect: true,
+	maxRetriesPerRequest: 3,
+})
+let redisReady = false
+
+async function initInfrastructure() {
+	// ── Kafka Producer ──
+	try {
+		await kafkaProducer.connect()
+		kafkaReady = true
+		console.log('[kafka] ✓ Producer connected to', KAFKA_BROKERS.join(', '))
+	} catch (err) {
+		console.error('[kafka] ✗ Producer connection failed:', err.message)
+		console.error('[kafka]   Code execution pipeline unavailable until Kafka is reachable')
+		kafkaReady = false
+	}
+
+	// ── Redis Subscriber ──
+	try {
+		await redisSubscriber.connect()
+		redisReady = true
+		console.log('[redis] ✓ Subscriber connected to', `${REDIS_HOST}:${REDIS_PORT}`)
+
+		// Subscribe to execution pipeline channels
+		await redisSubscriber.subscribe(
+			'code-execution-status',
+			'code-execution-results'
+		)
+		console.log('[redis] ✓ Subscribed to code-execution-status, code-execution-results')
+
+		// ── Redis → Socket.io Relay Bridge ──
+		// When the judge-worker publishes status/result to Redis,
+		// this relay forwards it to the correct client socket.
+		redisSubscriber.on('message', (channel, rawMessage) => {
+			try {
+				const data = JSON.parse(rawMessage)
+				const targetSocketId = data.socketId
+
+				if (!targetSocketId) {
+					console.warn('[redis-relay] Message missing socketId, skipping')
+					return
+				}
+
+				if (channel === 'code-execution-status') {
+					io.to(targetSocketId).emit(ACTIONS.CODE_EXECUTION_STATUS, {
+						submissionId: data.submissionId,
+						stage: data.stage,
+						timestamp: data.timestamp,
+					})
+				} else if (channel === 'code-execution-results') {
+					io.to(targetSocketId).emit(ACTIONS.CODE_EXECUTION_RESULT, {
+						submissionId: data.submissionId,
+						verdict: data.verdict,
+						stdout: data.stdout,
+						stderr: data.stderr,
+						executionTimeMs: data.executionTimeMs,
+						timestamp: data.timestamp,
+					})
+				}
+			} catch (parseErr) {
+				console.error(`[redis-relay] Failed to relay on ${channel}:`, parseErr.message)
+			}
+		})
+	} catch (err) {
+		console.error('[redis] ✗ Subscriber connection failed:', err.message)
+		console.error('[redis]   Real-time execution updates unavailable until Redis is reachable')
+		redisReady = false
+	}
+
+	// Graceful error logging (non-fatal — ioredis auto-reconnects)
+	redisSubscriber.on('error', (err) => {
+		console.error('[redis] Subscriber error:', err.message)
+	})
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret'
 
@@ -336,6 +434,53 @@ io.on('connection', (socket) => {
 		}
 	})
 
+	// ── Code Execution via Kafka Pipeline ──
+	socket.on(ACTIONS.RUN_CODE, async ({ code, language, input, roomId }) => {
+		try {
+			if (!code || !language) {
+				return io.to(socket.id).emit('error', { message: 'Code and language are required' })
+			}
+
+			if (!kafkaReady) {
+				return io.to(socket.id).emit('error', {
+					message: 'Code execution service is temporarily unavailable. Ensure Docker infrastructure is running.',
+				})
+			}
+
+			const submissionId = uuidv4()
+
+			// Produce task to Kafka — fire and acknowledge
+			await kafkaProducer.send({
+				topic: 'code-execution-tasks',
+				messages: [{
+					key: submissionId,
+					value: JSON.stringify({
+						submissionId,
+						code,
+						language,
+						input: input || '',
+						socketId: socket.id,
+						roomId: roomId || null,
+						userId: null,
+						timestamp: Date.now(),
+					}),
+				}],
+			})
+
+			// Immediately acknowledge — main event loop stays completely unblocked
+			io.to(socket.id).emit(ACTIONS.CODE_EXECUTION_STATUS, {
+				submissionId,
+				stage: 'queued',
+				timestamp: Date.now(),
+			})
+
+			console.log(`[run-code] ▶ Task ${submissionId} queued | lang=${language}`)
+		} catch (err) {
+			console.error('[run-code] Failed to queue execution task:', err.message)
+			io.to(socket.id).emit('error', { message: 'Failed to queue code execution. Please try again.' })
+		}
+	})
+
 	socket.on('disconnecting', () => {
 		const user = userSocketMap.find((user) => user.socketId === socket.id)
 		const roomId = user?.roomId
@@ -557,4 +702,8 @@ app.get('/', (req, res) => {
 
 server.listen(PORT, () => {
 	console.log(`Listening on port ${PORT}`)
+	// Boot Kafka producer + Redis subscriber (async, non-blocking, failure-safe)
+	initInfrastructure().catch((err) => {
+		console.error('[boot] Infrastructure init error (non-fatal):', err.message)
+	})
 })
