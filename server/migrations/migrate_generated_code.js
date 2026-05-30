@@ -2,11 +2,22 @@ require('dotenv').config()
 const mongoose = require('mongoose')
 const Room = require('../models/Room')
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/codeconnect'
+const LOCAL_MONGO_URI = 'mongodb://127.0.0.1:27017/codeconnect'
+const MONGO_URI = process.env.MONGO_URI || LOCAL_MONGO_URI
 
 async function migrate() {
-  await mongoose.connect(MONGO_URI)
-  console.log('Connected to MongoDB for migration')
+  try {
+    await mongoose.connect(MONGO_URI)
+    console.log(`Connected to MongoDB for migration (${MONGO_URI === LOCAL_MONGO_URI ? 'local' : 'configured'})`)
+  } catch (err) {
+    if (MONGO_URI !== LOCAL_MONGO_URI) {
+      console.warn('[migration] Configured MongoDB URI failed, trying local fallback...')
+      await mongoose.connect(LOCAL_MONGO_URI)
+      console.log('Connected to local MongoDB for migration')
+    } else {
+      throw err
+    }
+  }
   const rooms = await Room.find({}).lean()
   for (const r of rooms) {
     if (r.generatedCode && !r.generatedCodes) {

@@ -95,14 +95,14 @@ function Editor() {
         <div className="flex flex-col w-full h-full">
             {/* Top Section: Question display + Language Selector + Submit Code Button */}
             <div className="bg-darkHover border-b border-gray-700 shrink-0 p-3">
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex flex-wrap items-end gap-3 mb-3">
                     {/* Language Selector */}
                     <div className="flex flex-col">
                         <label className="text-xs text-gray-400 mb-1">Language</label>
                         <select
                             value={selectedLanguage}
                             onChange={handleLanguageChange}
-                            className="bg-dark border border-gray-600 text-white text-sm rounded px-3 py-2 outline-none focus:border-primary min-w-[120px]"
+                            className="bg-dark border border-gray-600 text-white text-sm rounded-md px-3 py-2 outline-none transition-colors focus:border-primary cursor-pointer min-w-[120px]"
                         >
                             {LANGUAGE_OPTIONS.map((lang) => (
                                 <option key={lang.value} value={lang.value}>
@@ -122,7 +122,7 @@ function Editor() {
                                         <select
                                             value={selectedQuestionId || ''}
                                             onChange={(e) => setSelectedQuestionId(e.target.value)}
-                                            className="flex-1 p-2 bg-darkHover text-white rounded text-sm border border-gray-700 focus:outline-none focus:border-primary"
+                                            className="flex-1 p-2 bg-darkHover text-white rounded-md text-sm border border-gray-700 outline-none transition-colors focus:border-primary cursor-pointer"
                                         >
                                             <option value="">-- Select a question --</option>
                                             {roomQuestions.map((q, idx) => (
@@ -139,7 +139,7 @@ function Editor() {
                                             </span>
                                             <button
                                                 onClick={() => setSelectedQuestionId(null)}
-                                                className="text-xs text-gray-400 hover:text-white underline ml-2 whitespace-nowrap"
+                                                className="text-xs text-gray-400 hover:text-white underline ml-2 whitespace-nowrap transition-colors cursor-pointer"
                                             >
                                                 Change
                                             </button>
@@ -160,7 +160,7 @@ function Editor() {
                                             socket.emit(ACTIONS.SUBMIT_CODE, { token: currentUser.token, roomId: currentUser.roomId, language: selectedLanguage, code: codeRef.current, questionId: selectedQuestionId })
                                             toast.success('Code submitted')
                                         }}
-                                        className={`px-4 py-2 rounded text-sm font-medium transition-all min-w-[140px] bg-primary text-black hover:bg-primary/90`}
+                                        className={`px-4 py-2 rounded-md text-sm font-medium transition-all min-w-[140px] bg-primary text-black hover:brightness-110 hover:shadow-md cursor-pointer`}
                                     >
                                         Submit Code
                                     </button>

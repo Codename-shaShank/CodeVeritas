@@ -20,7 +20,7 @@ function TabButton({ tabName, icon }) {
     return (
         <button
             onClick={() => handleTabClick(tabName)}
-            className="relative flex items-center justify-center"
+            className="relative flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-darkHover cursor-pointer"
         >
             {icon}
             {/* Show dot for new message in chat Tab Button */}

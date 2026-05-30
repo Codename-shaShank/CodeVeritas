@@ -90,9 +90,9 @@ function AnalysisTab() {
                             <button
                                 key={model.id}
                                 onClick={() => setActiveAITab(model.id)}
-                                className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-all ${
+                                className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all cursor-pointer ${
                                     activeAITab === model.id
-                                        ? 'bg-primary text-black'
+                                        ? 'bg-primary text-black shadow-md'
                                         : 'text-gray-300 hover:text-white hover:bg-darkHover'
                                 }`}
                             >
@@ -115,7 +115,7 @@ function AnalysisTab() {
                             <span className={`w-2 h-2 rounded-full mr-2 ${aiModels.find(m => m.id === activeAITab)?.bgColor}`}></span>
                             Similar Lines Found: {getSimilarLines(activeAITab).length}
                         </h4>
-                        <div className="text-xs text-gray-400 space-y-2 max-h-24 overflow-y-auto">
+                        <div className="text-xs text-gray-400 space-y-2 max-h-40 overflow-y-auto">
                             {getSimilarLines(activeAITab).length > 0 ? (
                                 getSimilarLines(activeAITab).map((match, index) => (
                                     <div key={index} className="flex justify-between items-center p-2 bg-darkHover rounded">
@@ -142,7 +142,7 @@ function AnalysisTab() {
                     {aiModels.map((model) => {
                         const similarCount = getSimilarLines(model.id).length
                         return (
-                            <div key={model.id} className="bg-dark rounded p-4 border-l-4" style={{ borderLeftColor: model.bgColor.replace('bg-', '') }}>
+                            <div key={model.id} className={`bg-dark rounded-md p-4 border-l-4 ${model.color}`}>
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="font-medium text-white">{model.name}</span>
                                     <span className={`text-xs px-2 py-1 rounded ${

@@ -83,7 +83,7 @@ function SettingsTab() {
             />
             {/* Show GitHub corner option */}
             <div className="mt-4 flex w-full items-center justify-between">
-                <label>Show github corner</label>
+                <label className="text-sm text-gray-300">Show GitHub Corner</label>
                 <label className="relative inline-flex cursor-pointer items-center">
                     <input
                         className="peer sr-only"
@@ -91,11 +91,11 @@ function SettingsTab() {
                         onChange={handleShowGitHubCornerChange}
                         checked={showGitHubCorner}
                     />
-                    <div className="peer h-6 w-12 rounded-full bg-darkHover outline-none duration-100 after:absolute after:left-1 after:top-1 after:flex after:h-4 after:w-4 after:items-center after:justify-center after:rounded-full after:bg-white after:font-bold after:outline-none after:duration-500 peer-checked:after:translate-x-6 peer-checked:after:border-white peer-focus:outline-none"></div>
+                    <div className="peer h-6 w-12 rounded-full bg-darkHover outline-none duration-300 after:absolute after:left-1 after:top-1 after:flex after:h-4 after:w-4 after:items-center after:justify-center after:rounded-full after:bg-white after:font-bold after:outline-none after:duration-500 peer-checked:bg-primary peer-checked:after:translate-x-6 peer-checked:after:border-white peer-focus:outline-none"></div>
                 </label>
             </div>
             <button
-                className="mt-auto w-full rounded-md border-none bg-darkHover px-4 py-2 text-white outline-none"
+                className="mt-auto w-full rounded-md border-none bg-darkHover px-4 py-2 text-white outline-none transition-colors hover:bg-danger/80 hover:text-white cursor-pointer"
                 onClick={resetSettings}
             >
                 Reset to default

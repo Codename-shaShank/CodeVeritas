@@ -178,7 +178,10 @@ README.md
 
    ```bash
    PORT=3000
+   MONGO_URI=mongodb://127.0.0.1:27017/codeconnect
    ```
+
+   If you want to use MongoDB Atlas instead, replace `MONGO_URI` with your Atlas connection string. The server will also fall back to the local URI above if the configured one is unreachable during development.
 
 4. **Install dependencies:**
    Navigate to the frontend and backend directories separately and run:

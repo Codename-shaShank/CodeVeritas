@@ -82,7 +82,7 @@ function RunTab() {
         return (
             <button
                 className={
-                    "flex-1 rounded-md py-3 font-bold transition-all " +
+                    "flex-1 rounded-md py-3 font-bold transition-all cursor-pointer " +
                     "disabled:cursor-not-allowed disabled:opacity-50 " +
                     "flex items-center justify-center gap-2" +
                     extraClass
@@ -343,7 +343,7 @@ function RunTab() {
                         Language
                     </label>
                     <select
-                        className="w-full rounded-md border-none bg-darkHover px-4 py-3 text-white outline-none"
+                        className="w-full rounded-md border border-transparent bg-darkHover px-4 py-3 text-white outline-none transition-colors focus:border-primary/50 cursor-pointer"
                         value={selectedLanguage ? JSON.stringify(selectedLanguage) : ""}
                         onChange={handleLanguageChange}
                     >
@@ -368,7 +368,7 @@ function RunTab() {
                         Input
                     </label>
                     <textarea
-                        className="min-h-[120px] w-full resize-none rounded-md border-none bg-darkHover p-3 text-white outline-none placeholder:text-gray-500"
+                        className="min-h-[120px] w-full resize-none rounded-md border border-transparent bg-darkHover p-3 text-white outline-none transition-colors focus:border-primary/50 placeholder:text-gray-500"
                         placeholder="Enter input for your program..."
                         onChange={(e) => setInput(e.target.value)}
                     />
@@ -379,7 +379,7 @@ function RunTab() {
                     {renderRunButton()}
 
                     <button
-                        className="flex-1 rounded-md bg-secondary py-3 font-bold text-white transition-all hover:bg-secondary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex-1 rounded-md bg-secondary py-3 font-bold text-white transition-all hover:bg-secondary/90 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                         onClick={analyzeCode}
                         disabled={!currentFile || !currentFile.content}
                     >

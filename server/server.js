@@ -90,11 +90,32 @@ const io = new Server(server, {
 })
 
 // Connect to MongoDB
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/codeconnect'
-mongoose
-	.connect(MONGO_URI)
-	.then(() => console.log('Connected to MongoDB'))
-	.catch((err) => console.error('MongoDB connection error', err))
+const LOCAL_MONGO_URI = 'mongodb://127.0.0.1:27017/codeconnect'
+const MONGO_URI = process.env.MONGO_URI || LOCAL_MONGO_URI
+
+async function connectMongo() {
+	try {
+		await mongoose.connect(MONGO_URI)
+		console.log(`Connected to MongoDB (${MONGO_URI === LOCAL_MONGO_URI ? 'local' : 'configured'})`)
+		return
+	} catch (err) {
+		if (MONGO_URI !== LOCAL_MONGO_URI) {
+			console.warn('[mongo] Configured MongoDB URI failed, trying local fallback...')
+			try {
+				await mongoose.connect(LOCAL_MONGO_URI)
+				console.log('Connected to MongoDB (local fallback)')
+				return
+			} catch (fallbackErr) {
+				console.error('MongoDB connection error', fallbackErr)
+				return
+			}
+		}
+
+		console.error('MongoDB connection error', err)
+	}
+}
+
+connectMongo()
 
 // ─────────────────────────────────────────────
 // Kafka + Redis Infrastructure (Code Execution Pipeline)

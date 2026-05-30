@@ -4,9 +4,9 @@ import { PiCaretDownBold } from "react-icons/pi"
 function Select({ onChange, value, options, title }) {
     return (
         <div className="relative w-full">
-            <label className="mb-2">{title}</label>
+            <label className="mb-2 block text-sm text-gray-300">{title}</label>
             <select
-                className="w-full rounded-md border-none bg-darkHover px-4 py-2 text-white outline-none"
+                className="w-full rounded-md border border-transparent bg-darkHover px-4 py-2 text-white outline-none transition-colors focus:border-primary/50 cursor-pointer"
                 value={value}
                 onChange={onChange}
             >

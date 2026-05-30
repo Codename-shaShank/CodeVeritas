@@ -1,21 +1,71 @@
 @import url("tldraw/tldraw.css");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    /* Smooth scrolling globally */
+    html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Better text selection */
+    ::selection {
+        background: rgba(57, 224, 121, 0.3);
+        color: #fff;
+    }
+
+    /* Global focus-visible ring for keyboard accessibility */
+    *:focus-visible {
+        outline: 2px solid rgba(57, 224, 121, 0.5);
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+
+    /* Smooth transitions on all interactive elements */
+    button, a, input, select, textarea {
+        transition: all 0.2s ease;
+    }
+
+    /* Placeholder text styling */
+    input::placeholder, textarea::placeholder {
+        color: #6b7280;
+    }
+}
+
 @layer components {
     .tab-title {
-        @apply mb-2 w-full border-b pb-2 text-start text-lg;
+        @apply mb-2 w-full border-b border-gray-700 pb-2 text-start text-lg font-semibold text-white;
     }
 }
 
 body {
-    font-family: "Space Grotesk", sans-serif;
+    font-family: "Space Grotesk", "Inter", sans-serif;
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
     background-color: #212429;
+    color: #e5e7eb;
+}
+
+/* Missing keyframes for illustration animation */
+@keyframes up-down {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-12px);
+    }
+}
+
+/* Highlighted line in editor */
+.highlighted-line {
+    background: rgba(57, 224, 121, 0.15);
+    border-left: 3px solid #39E079;
 }
 
 /* --- Scrollbar Customization --- */

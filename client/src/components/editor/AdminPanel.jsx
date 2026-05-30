@@ -53,15 +53,15 @@ function AdminPanel() {
   }, [currentUser?.roomId, setRoomSubmissions])
 
   return (
-    <div className="p-4">
+    <div className="h-full overflow-auto p-4">
       <h2 className="text-xl font-semibold mb-2">Admin Panel</h2>
       <div className="mb-4">
         <label className="text-sm text-gray-400">Enter question (will be broadcast to candidates)</label>
-        <textarea value={questionText} onChange={(e) => setQuestionText(e.target.value)} className="w-full p-2 rounded bg-darkHover" rows={4}></textarea>
-        <input placeholder="Language hint (optional)" value={languageHint} onChange={(e) => setLanguageHint(e.target.value)} className="mt-2 w-full p-2 rounded bg-darkHover" />
+        <textarea value={questionText} onChange={(e) => setQuestionText(e.target.value)} className="w-full p-3 rounded-md bg-darkHover border border-transparent outline-none transition-colors focus:border-primary/50 resize-none" rows={4}></textarea>
+        <input placeholder="Language hint (optional)" value={languageHint} onChange={(e) => setLanguageHint(e.target.value)} className="mt-2 w-full p-3 rounded-md bg-darkHover border border-transparent outline-none transition-colors focus:border-primary/50" />
         <div className="mt-2 flex gap-2">
-          <button onClick={submitQuestion} className="bg-primary px-3 py-2 rounded text-black">Submit Question</button>
-          <button onClick={endRoom} disabled={endingRoom} className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 px-3 py-2 rounded text-white font-semibold">End Room</button>
+          <button onClick={submitQuestion} className="bg-primary px-4 py-2 rounded-md text-black font-medium transition-all hover:brightness-110 hover:shadow-md cursor-pointer">Submit Question</button>
+          <button onClick={endRoom} disabled={endingRoom} className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 px-4 py-2 rounded-md text-white font-semibold transition-all hover:shadow-md cursor-pointer">End Room</button>
         </div>
       </div>
 
@@ -71,9 +71,9 @@ function AdminPanel() {
           <h3 className="font-semibold mb-2">Posted Questions ({roomQuestions.length})</h3>
           <div className="space-y-2">
             {roomQuestions.map((q, idx) => (
-              <div key={q._id || idx} className="p-2 bg-darkHover rounded">
-                <div className="font-medium">Q{idx + 1}: {q.text}</div>
-                {q.languageHint && <div className="text-xs text-gray-400">Language: {q.languageHint}</div>}
+              <div key={q._id || idx} className="p-3 bg-darkHover rounded">
+                <div className="font-medium whitespace-pre-wrap text-sm leading-relaxed text-gray-100">Q{idx + 1}: {q.text}</div>
+                {q.languageHint && <div className="text-xs text-gray-400 mt-2">Language: {q.languageHint}</div>}
               </div>
             ))}
           </div>

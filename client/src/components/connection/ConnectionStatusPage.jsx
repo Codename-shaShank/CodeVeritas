@@ -25,13 +25,13 @@ const ConnectionError = () => {
             </span>
             <div className="flex flex-wrap justify-center gap-4">
                 <button
-                    className="mr-4 rounded-md bg-primary px-8 py-2 font-bold text-black"
+                    className="rounded-md bg-primary px-8 py-3 font-bold text-black transition-all hover:brightness-110 hover:shadow-lg cursor-pointer"
                     onClick={reloadPage}
                 >
                     Try Again
                 </button>
                 <button
-                    className="rounded-md bg-primary px-8 py-2 font-bold text-black"
+                    className="rounded-md border border-gray-500 bg-transparent px-8 py-3 font-bold text-white transition-all hover:bg-darkHover cursor-pointer"
                     onClick={gotoHomePage}
                 >
                     Go to HomePage

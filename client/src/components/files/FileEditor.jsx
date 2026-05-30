@@ -45,16 +45,16 @@ function FileEditor({ editingFileId, setEditingFileId, name }) {
             >
                 <input
                     type="text"
-                    className="w-[80%] flex-grow rounded-sm bg-white px-2 text-base text-black outline-none"
+                    className="w-[80%] flex-grow rounded-md bg-dark border border-gray-600 px-2 py-1 text-base text-white outline-none transition-colors focus:border-primary/50"
                     autoFocus
                     value={fileName}
                     onChange={handleOnChange}
                 />
                 <span className="flex gap-4">
-                    <button onClick={handleConfirm} type="submit">
+                    <button onClick={handleConfirm} type="submit" className="rounded p-1.5 text-primary transition-colors hover:bg-primary/20 cursor-pointer">
                         <FaCheck size={18} />
                     </button>
-                    <button onClick={handleCancel} type="reset">
+                    <button onClick={handleCancel} type="reset" className="rounded p-1.5 text-gray-400 transition-colors hover:bg-red-900/30 hover:text-danger cursor-pointer">
                         <IoClose size={22} />
                     </button>
                 </span>

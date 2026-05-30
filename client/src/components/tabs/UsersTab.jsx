@@ -53,7 +53,7 @@ function UsersTab() {
                 <div className="flex w-full gap-4">
                     {/* Share URL button */}
                     <button
-                        className="flex flex-grow items-center justify-center rounded-md bg-white p-3 text-black"
+                        className="flex flex-grow items-center justify-center rounded-md bg-white p-3 text-black transition-all hover:bg-gray-200 hover:shadow-md cursor-pointer"
                         onClick={shareURL}
                         title="Share Link"
                     >
@@ -61,7 +61,7 @@ function UsersTab() {
                     </button>
                     {/* Copy URL button */}
                     <button
-                        className="flex flex-grow items-center justify-center rounded-md bg-white p-3 text-black"
+                        className="flex flex-grow items-center justify-center rounded-md bg-white p-3 text-black transition-all hover:bg-gray-200 hover:shadow-md cursor-pointer"
                         onClick={copyURL}
                         title="Copy Link"
                     >
@@ -69,7 +69,7 @@ function UsersTab() {
                     </button>
                     {/* Leave room button */}
                     <button
-                        className="flex flex-grow items-center justify-center rounded-md bg-primary p-3 text-black"
+                        className="flex flex-grow items-center justify-center rounded-md bg-primary p-3 text-black transition-all hover:brightness-110 hover:shadow-md cursor-pointer"
                         onClick={leaveRoom}
                         title="Leave room"
                     >

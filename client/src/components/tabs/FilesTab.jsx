@@ -51,20 +51,20 @@ function FilesTab() {
         >
             <FileSystem />
             <button
-                className="flex w-full justify-start rounded-md p-2 transition-all hover:bg-darkHover"
+                className="flex w-full justify-start rounded-md p-2 transition-all hover:bg-darkHover cursor-pointer"
                 onClick={handleOpenFile}
             >
                 <TbFileUpload className="mr-2" size={24} />
                 Open File
             </button>
             <button
-                className="flex w-full justify-start rounded-md p-2 transition-all hover:bg-darkHover"
+                className="flex w-full justify-start rounded-md p-2 transition-all hover:bg-darkHover cursor-pointer"
                 onClick={downloadCurrentFile}
             >
                 <LuDownload className="mr-2" size={22} /> Download File
             </button>
             <button
-                className="flex w-full justify-start rounded-md p-2 transition-all hover:bg-darkHover"
+                className="flex w-full justify-start rounded-md p-2 transition-all hover:bg-darkHover cursor-pointer"
                 onClick={downloadAllFiles}
             >
                 <BiArchiveIn className="mr-2" size={22} /> Download All Files

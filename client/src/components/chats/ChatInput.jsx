@@ -36,12 +36,12 @@ function ChatInput() {
         >
             <input
                 type="text"
-                className="w-full flex-grow rounded-md border-none bg-dark p-2 outline-none"
+                className="w-full flex-grow rounded-l-md border-none bg-dark p-2 outline-none placeholder:text-gray-500"
                 placeholder="Enter a message..."
                 ref={inputRef}
             />
             <button
-                className="flex items-center justify-center rounded-r-md  bg-primary p-2 text-black"
+                className="flex items-center justify-center rounded-r-md bg-primary p-2 text-black transition-all hover:opacity-90 cursor-pointer"
                 type="submit"
             >
                 <LuSendHorizonal size={24} />

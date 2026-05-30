@@ -7,6 +7,8 @@ const AppContext = createContext()
 function AppContextProvider({ children }) {
     const [users, setUsers] = useState([])
     const [status, setStatus] = useState(UserStatus.INITIAL)
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [authChecked, setAuthChecked] = useState(false)
     const [currentUser, setCurrentUser] = useState(() => ({
         username: "",
         roomId: "",
@@ -42,6 +44,49 @@ function AppContextProvider({ children }) {
         checkMlStatus()
     }, [])
 
+    useEffect(() => {
+        const verifyStoredSession = async () => {
+            const storedToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+
+            if (!storedToken) {
+                setIsAuthenticated(false)
+                setAuthChecked(true)
+                return
+            }
+
+            try {
+                const API_BASE = import.meta.env.VITE_BACKEND_URL || ''
+                const res = await fetch(`${API_BASE}/api/auth/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: storedToken }),
+                })
+
+                if (!res.ok) {
+                    throw new Error('invalid token')
+                }
+
+                const data = await res.json()
+                setCurrentUser((prev) => ({
+                    ...prev,
+                    id: data.user.id,
+                    username: data.user.username,
+                    email: data.user.email,
+                    token: storedToken,
+                }))
+                setIsAuthenticated(true)
+            } catch (err) {
+                localStorage.removeItem('token')
+                setCurrentUser({ username: '', roomId: '', token: null, email: '' })
+                setIsAuthenticated(false)
+            } finally {
+                setAuthChecked(true)
+            }
+        }
+
+        verifyStoredSession()
+    }, [setCurrentUser])
+
     return (
         <AppContext.Provider
             value={{
@@ -62,6 +107,9 @@ function AppContextProvider({ children }) {
                 checkMlStatus,
                 status,
                 setStatus,
+                isAuthenticated,
+                setIsAuthenticated,
+                authChecked,
                 state,
                 setState,
                 drawingData,

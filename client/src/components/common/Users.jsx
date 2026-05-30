@@ -27,11 +27,11 @@ const User = ({ user }) => {
             title={title}
         >
             <Avatar name={username} size="50" round={"12px"} title={title} />
-            <p className="line-clamp-2 max-w-full text-ellipsis break-words">
+            <p className="line-clamp-2 max-w-full text-ellipsis break-words text-gray-200 text-sm text-center">
                 {username}
             </p>
             <div
-                className={`absolute right-5 top-0 h-3 w-3 rounded-full ${
+                className={`absolute right-5 top-0 h-3 w-3 rounded-full transition-colors ${
                     status === ACTIONS.USER_ONLINE ? "bg-green-500" : "bg-danger"
                 }`}
             ></div>

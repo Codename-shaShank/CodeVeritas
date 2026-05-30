@@ -8,7 +8,7 @@
  *
  *  Supported languages:
  *    • JavaScript  → node:20-alpine
- *    • C / C++     → gcc:13-alpine
+ *    • C / C++     → gcc:14.3.0-bookworm
  *
  *  Verdicts:
  *    AC  — Accepted (exit 0, clean stdout)
@@ -55,8 +55,8 @@ const CONFIG = {
 	docker: {
 		images: {
 			javascript: 'node:20-alpine',
-			c: 'gcc:13-alpine',
-			cpp: 'gcc:13-alpine',
+				c: 'gcc:13',
+				cpp: 'gcc:13',
 		},
 	},
 }

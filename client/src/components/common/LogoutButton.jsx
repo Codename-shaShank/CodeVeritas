@@ -2,7 +2,7 @@ import useAppContext from '@/hooks/useAppContext'
 import useSocket from '@/hooks/useSocket'
 
 function LogoutButton() {
-  const { setCurrentUser, setStatus } = useAppContext()
+  const { currentUser, isAuthenticated, setCurrentUser, setIsAuthenticated, setStatus } = useAppContext()
   const { socket } = useSocket()
 
   const logout = () => {
@@ -16,13 +16,17 @@ function LogoutButton() {
       // ignore
     }
     setCurrentUser({ username: '', roomId: '', token: null, email: '' })
+    setIsAuthenticated(false)
     setStatus('INITIAL')
     // navigate to home without router hook
     window.location.href = '/'
   }
 
+  // Only show logout when user is authenticated
+  if (!isAuthenticated || !currentUser?.token) return null
+
   return (
-    <button onClick={logout} className="fixed top-4 right-4 z-50 rounded bg-red-600 hover:bg-red-700 text-white px-3 py-1 text-sm">Logout</button>
+    <button onClick={logout} className="fixed top-4 right-4 sm:right-20 z-50 rounded-md shadow-md bg-red-600 hover:bg-red-700 hover:shadow-lg text-white px-4 py-1.5 text-sm font-medium transition-all cursor-pointer">Logout</button>
   )
 }
 
