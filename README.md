@@ -1,205 +1,129 @@
-# Code Connect - A Realtime Code Editor
+# Code Connect
 
-![Preview Image](./preview.png)
+Code Connect is a realtime collaborative coding workspace with authentication, shared rooms, live chat, file sync, drawing, code execution, and AI-assisted analysis.
 
-Code Connect is a collaborative, real-time code editor where users can seamlessly code together. It provides a platform for multiple users to enter a room, share a unique room ID, and collaborate on code simultaneously.
+## Project Layout
 
-## 🔮 Features
-
-- 💻 Real-time collaboration on code editing across multiple files
-- 📁 Open, edit, save, and delete file functionalities
-- 💾 Option to download files edited within the collaboration session
-- 🚀 Unique room generation with room ID for collaboration
-- 🌍 Comprehensive language support for versatile programming
-- 🌈 Syntax highlighting for various file types with auto-language detection
-- 🚀 Code Execution: Users can execute the code directly within the collaboration environment, providing instant feedback and results.
-- ⏱️ Instant updates and synchronization of code changes across all files
-- 📣 Notifications for user join and leave events
-- 👥 User presence list of users currently in the collaboration session, including online/offline status indicators
-- 💬 Group chatting allows users to communicate in real-time while working on code.
-- 🎩 Real-time tooltip displaying users currently editing
-- 💡 Auto suggestion based on programming language
-- 🔠 Option to change font size and font family
-- 🎨 Multiple themes for personalized coding experience
-- 🎨 Collaborative Drawing: Enable users to draw and sketch collaboratively in real-time, enhancing the interactive experience of your project.
-
-## 🚀 Live Preview
-
-You can view the live preview of the project [here](https://code-connect-two-ivory.vercel.app/).
-
-## 💻 Tech Stack
-
-![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![NodeJS](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
-![ExpressJS](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
-![Socket io](https://img.shields.io/badge/Socket.io-ffffff?style=for-the-badge)
-![Git](https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-
-<details>
-    <summary>
-        <h2>📂 Folder Structure</h2>
-    </summary>
-
-```
-client/
-├── public/
-│   ├── favicon/
-│   │   └── ...
-├── src/
-│   ├── api/
-│   │   └── index.jsx
-│   ├── assets/
-│   │   └── ...
-│   ├── components/
-│   │   ├── chats/
-│   │   │   ├── ChatInput.jsx
-│   │   │   └── ChatList.jsx
-│   │   ├── common/
-│   │   │   ├── Users.jsx
-│   │   │   ├── Footer.jsx
-│   │   │   └── Select.jsx
-│   │   ├── connection/
-│   │   │   └── ConnectionStatusPage.jsx
-│   │   ├── drawing/
-│   │   │   └── DrawingEditor.jsx
-│   │   ├── editor/
-│   │   │   ├── tooltip.js
-│   │   │   ├── Editor.jsx
-│   │   │   └── EditorComponent.jsx
-│   │   ├── files/
-│   │   │   ├── FileEditor.jsx
-│   │   │   └── FileSystem.jsx
-│   │   ├── loading/
-│   │   │   └── Loading.jsx
-│   │   ├── sidebar/
-│   │   │   └── Sidebar.jsx
-│   │   ├── tabs/
-│   │   │   ├── ChatsTab.jsx
-│   │   │   ├── UsersTab.jsx
-│   │   │   ├── FileTab.jsx
-│   │   │   ├── RunTab.jsx
-│   │   │   ├── SettingsTab.jsx
-│   │   │   └── TabButton.jsx
-│   │   ├── toast/
-│   │   │   └── Toast.jsx
-│   │   ├── GitHubCorner.jsx
-│   │   └── SplitterComponent.jsx
-│   ├── context/
-│   │   ├── AppContext.jsx
-│   │   ├── AppProvider.jsx
-│   │   ├── ChatContext.jsx
-│   │   ├── FileContext.jsx
-│   │   ├── RunContext.jsx
-│   │   ├── SettingContext.jsx
-│   │   ├── SocketContext.jsx
-│   │   └── TabContext.jsx
-│   ├── hooks/
-│   │   ├── useAppContext.jsx
-│   │   ├── useChatRoom.jsx
-│   │   ├── useFileSystem.jsx
-│   │   ├── useFullScreen.jsx
-│   │   ├── useLocalStorage.jsx
-│   │   ├── usePageEvents.jsx
-│   │   ├── useResponsive.jsx
-│   │   ├── useRunCode.jsx
-│   │   ├── useSetting.jsx
-│   │   ├── useSocket.jsx
-│   │   ├── useTab.jsx
-│   │   ├── useUserActivity.jsx
-│   │   └── useWindowDimensions.jsx
-│   ├── pages/
-│   │   ├── EditorPage.jsx
-│   │   └── HomePage.jsx
-│   ├── resources/
-│   │   ├── Font.js
-│   │   └── Themes.js
-│   ├── socket/
-│   │   └── socket.js
-│   ├── utils/
-│   │   ├── actions.js
-│   │   ├── editorPlaceholder.js
-│   │   ├── formateDate.js
-│   │   ├── initialFile.js
-│   │   ├── getIconClassName.js
-│   │   ├── status.js
-│   │   └── tabs.js
-│   ├── App.jsx
-│   ├── index.css
-│   └── main.jsx
-├── .env
-├── .eslintrc.cjs
-├── .gitignore
-├── index.html
-├── package-lock.json
-├── package.json
-├── postcss.config.js
-├── tailwind.config.js
-└── vercel.json
-└── vite.config.js
-
-server/
-├── utils/
-│   └── actions.js
-├── .env
-├── .gitignore
-├── package-lock.json
-├── package.json
-└── server.js
-
-CONTRIBUTING.md
-LICENSE
-preview.png
-README.md
+```text
+docker-compose.yml        Local MongoDB / Kafka / Zookeeper / Redis stack
+start-dev.ps1             Windows helper to start the full stack
+client/                   Vite + React frontend
+server/                   Express + Socket.IO backend
+judge-worker/             Kafka consumer and Docker-based code execution worker
 ```
 
-</details>
+## What You Need
 
-## ⚙️ Installation
+- Node.js 18+ and npm
+- Docker Desktop or Docker Engine for the local MongoDB, Kafka, Zookeeper, and Redis stack
+- A backend JWT secret
+- A reachable ML agent service for AI generation and analysis
+- Optional: MongoDB Atlas if you do not want to use the local MongoDB container
 
-1. **Fork this repository:** Click the Fork button located in the top-right corner of this page to fork the repository.
-2. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Codename-shaShank/Code-connect.git
+## URLs And Ports
+
+| Service | URL | Purpose |
+| --- | --- | --- |
+| Frontend | http://localhost:5173 | Vite dev server |
+| Backend | http://localhost:3000 | Express and Socket.IO API |
+| MongoDB | mongodb://127.0.0.1:27017 | Local MongoDB port |
+| Kafka | localhost:9092 | Broker port |
+| Zookeeper | localhost:2181 | Kafka coordination |
+| Redis | localhost:6379 | Pub/Sub relay for execution updates |
+| ML agent | https://code-plag-fastapi.onrender.com | Default AI endpoint used by the backend |
+
+## Environment Files
+
+Copy the example files below into local `.env` files before starting the app.
+
+### client/.env.example
+
+```bash
+VITE_BACKEND_URL=http://localhost:3000
+```
+
+### server/.env.example
+
+```bash
+PORT=3000
+MONGO_URI=mongodb://127.0.0.1:27017/codeconnect
+JWT_SECRET=replace-with-a-long-random-secret
+KAFKA_BROKERS=localhost:9092
+REDIS_HOST=localhost
+REDIS_PORT=6379
+ML_AGENT_URL=https://code-plag-fastapi.onrender.com
+```
+
+### judge-worker/.env.example
+
+```bash
+KAFKA_BROKERS=localhost:9092
+KAFKA_GROUP_ID=judge-workers
+REDIS_HOST=localhost
+REDIS_PORT=6379
+```
+
+Notes:
+
+- If you use MongoDB Atlas, replace `MONGO_URI` with your Atlas connection string.
+- The server also falls back to `mongodb://127.0.0.1:27017/codeconnect` if `MONGO_URI` is not set.
+- There is no `GEMINI_API_KEY` in this repository. The backend calls the external ML agent instead.
+- `judge-worker` uses the local Kafka and Redis defaults above. If you move those services elsewhere, set the matching environment variables before starting it.
+
+## Fresh Clone Setup
+
+1. Clone the repository.
+2. Copy the example environment files into place:
+   ```powershell
+   Copy-Item client\.env.example client\.env
+   Copy-Item server\.env.example server\.env
+   Copy-Item judge-worker\.env.example judge-worker\.env
    ```
-3. **Set .env file:**
-   Inside the client and server directory, create or edit the .env file and add the following line:  
-   Frontend:
-
-   ```bash
-   VITE_BACKEND_URL=<your_server_url>
+3. Update `server/.env` with a strong `JWT_SECRET`. Keep the local `MONGO_URI` for Docker Compose, or replace it with your MongoDB Atlas connection string.
+4. Start the full stack from the repository root:
+   ```powershell
+   .\start-dev.ps1
    ```
-
+   The helper script starts Docker Compose and opens backend, worker, and frontend windows. It also installs dependencies the first time if a folder does not yet have `node_modules`.
+5. If you prefer manual startup, run the services in this order:
+   Infrastructure:
+   ```powershell
+   docker compose up -d
+   ```
    Backend:
-
-   ```bash
-   PORT=3000
-   ```
-
-4. **Install dependencies:**
-   Navigate to the frontend and backend directories separately and run:
-   ```bash
-    npm install
-   ```
-5. **Start the frontend and backend servers:**  
-   Frontend:
-   ```bash
-   cd client
-   npm run dev
-   ```
-   Backend:
-   ```bash
+   ```powershell
    cd server
+   npm install
    npm run dev
    ```
-6. **Access the application:**
-   Open a browser and enter the following URL:
-   ```bash
-   http://localhost:5173/
+   Judge worker:
+   ```powershell
+   cd judge-worker
+   npm install
+   npm run dev
    ```
-# code-connecter
-# code-connecter-1
+   Frontend:
+   ```powershell
+   cd client
+   npm install
+   npm run dev
+   ```
+   Docker Compose starts MongoDB, Kafka, Zookeeper, and Redis. The three npm commands start the backend, worker, and frontend.
+6. Open http://localhost:5173 in your browser.
+
+## Where The Backend And AI Calls Live
+
+- server/server.js connects to MongoDB, verifies JWT auth, serves room data, calls the ML agent at /generate and /analyze, and publishes execution events through Socket.IO.
+- server/migrations/migrate_generated_code.js connects to MongoDB for the generated-code migration.
+- judge-worker/worker.js consumes Kafka jobs, runs code inside Docker containers, and publishes results to Redis.
+- client/src/context/AppContext.jsx verifies the stored login token and checks ML agent health.
+- client/src/context/SocketContext.jsx connects the frontend to the backend socket.
+- client/src/components/forms/AuthComponent.jsx sends the login and signup requests.
+- client/src/components/editor/AdminPanel.jsx fetches room data from the backend.
+- client/src/components/tabs/AnalysisTab.jsx renders the AI analysis returned by the backend.
+
+## Feature Notes
+
+- The Gemini, ChatGPT, and Claude labels in the UI are model output tabs, not direct API keys in this repository.
+- If the ML agent is unreachable, the core editor can still load, but AI generation and analysis will fail.
+- If Kafka, Redis, or the judge worker are not running, code execution will not work.

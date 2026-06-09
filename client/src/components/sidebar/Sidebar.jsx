@@ -44,7 +44,7 @@ function Sidebar() {
                 />
 
                 {/* Button to change state coding | drawing */}
-                <button className="self-end" onClick={changeState}>
+                <button className="self-end rounded-lg p-2 transition-colors hover:bg-darkHover cursor-pointer" title={state === STATES.CODING ? 'Switch to Drawing' : 'Switch to Coding'} onClick={changeState}>
                     {state === STATES.CODING ? (
                         <MdOutlineDraw size={30} />
                     ) : (

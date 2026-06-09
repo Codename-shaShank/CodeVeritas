@@ -21,10 +21,12 @@ function EditorComponent() {
             ) : currentFile !== null ? (
                 <Editor />
             ) : (
-                <div className="flex h-full items-center justify-center">
+                <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+                    <span className="text-4xl opacity-30">📄</span>
                     <h1 className="text-xl text-white">
                         No file is currently open.
                     </h1>
+                    <p className="text-sm text-gray-500">Open a file from the sidebar to start coding</p>
                 </div>
             )}
         </div>

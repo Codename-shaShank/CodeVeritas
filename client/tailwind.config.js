@@ -8,6 +8,7 @@ export default {
                 darkHover: "#3D404A",
                 light: "#f5f5f5",
                 primary: "#39E079",
+                secondary: "#6366f1",
                 danger: "#ef4444",
             },
             fontFamily: {

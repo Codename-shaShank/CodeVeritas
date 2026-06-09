@@ -156,13 +156,34 @@ function FormComponent() {
     return (
         <div className="flex w-full max-w-[500px] flex-col items-center justify-center gap-4 p-4 sm:w-[500px] sm:p-8">
             <h1 className="text-4xl sm:text-5xl">Code Connect</h1>
-            <p className="mb-4 text-center md:mb-8">
+            <p className="mb-2 text-center">
                 {"Code, Chat, Collaborate. It's All in Connect."}
             </p>
+
+            {/* Profile Section — only shown when logged in */}
+            {currentUser?.token && (
+                <div className="flex w-full items-center gap-3 rounded-lg border border-gray-600 bg-darkHover px-4 py-3 mb-2">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-bold text-black">
+                        {(currentUser.username || currentUser.email || '?').charAt(0).toUpperCase()}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-white">
+                            {currentUser.username || 'User'}
+                        </p>
+                        {currentUser.email && (
+                            <p className="truncate text-xs text-gray-400">{currentUser.email}</p>
+                        )}
+                    </div>
+                    <span className="shrink-0 rounded-full bg-green-600/20 px-2 py-0.5 text-xs font-medium text-green-400">
+                        Online
+                    </span>
+                </div>
+            )}
+
             <div className="flex w-full flex-col gap-4">
                 <div className="flex gap-2">
-                    <button className={`px-3 py-2 rounded ${mode === 'join' ? 'bg-primary text-black' : 'bg-transparent'}`} onClick={() => setMode('join')}>Join Room</button>
-                    <button className={`px-3 py-2 rounded ${mode === 'create' ? 'bg-primary text-black' : 'bg-transparent'}`} onClick={() => setMode('create')}>Create Room</button>
+                    <button className={`px-4 py-2 rounded-md font-medium transition-all cursor-pointer ${mode === 'join' ? 'bg-primary text-black shadow-md' : 'bg-transparent text-gray-300 hover:bg-darkHover'}`} onClick={() => setMode('join')}>Join Room</button>
+                    <button className={`px-4 py-2 rounded-md font-medium transition-all cursor-pointer ${mode === 'create' ? 'bg-primary text-black shadow-md' : 'bg-transparent text-gray-300 hover:bg-darkHover'}`} onClick={() => setMode('create')}>Create Room</button>
                 </div>
                 {mode === 'join' ? (
                     <form onSubmit={joinRoom} className="flex w-full flex-col gap-4">
@@ -170,7 +191,7 @@ function FormComponent() {
                             type="text"
                             name="roomId"
                             placeholder="Room Id"
-                            className="w-full rounded-md border border-gray-500 bg-darkHover px-3 py-3 focus:outline-none"
+                            className="w-full rounded-md border border-gray-600 bg-darkHover px-3 py-3 outline-none transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
                             onChange={handleInputChanges}
                             value={currentUser.roomId}
                         />
@@ -178,7 +199,7 @@ function FormComponent() {
                             type="password"
                             name="password"
                             placeholder="Room Password"
-                            className="w-full rounded-md border border-gray-500 bg-darkHover px-3 py-3 focus:outline-none"
+                            className="w-full rounded-md border border-gray-600 bg-darkHover px-3 py-3 outline-none transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
                             onChange={handleInputChanges}
                             value={currentUser.password || ''}
                         />
@@ -186,16 +207,23 @@ function FormComponent() {
                             type="text"
                             name="username"
                             placeholder="Username"
-                            className="w-full rounded-md border border-gray-500 bg-darkHover px-3 py-3 focus:outline-none"
+                            className="w-full rounded-md border border-gray-600 bg-darkHover px-3 py-3 outline-none transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
                             onChange={handleInputChanges}
                             value={currentUser.username}
                             ref={usernameRef}
                         />
                         <button
                             type="submit"
-                            className="mt-2 w-full rounded-md bg-primary px-8 py-3 text-lg font-semibold text-black"
+                            className="mt-2 w-full rounded-md bg-primary px-8 py-3 text-lg font-semibold text-black transition-all hover:brightness-110 hover:shadow-lg cursor-pointer"
                         >
                             Join
+                        </button>
+                        <button
+                            type="button"
+                            className="cursor-pointer select-none text-sm underline text-gray-400 hover:text-white transition-colors"
+                            onClick={createNewRoomId}
+                        >
+                            Generate Unique Room Id
                         </button>
                     </form>
                 ) : (
@@ -204,39 +232,33 @@ function FormComponent() {
                             type="text"
                             name="username"
                             placeholder="Admin Username"
-                            className="w-full rounded-md border border-gray-500 bg-darkHover px-3 py-3 focus:outline-none"
+                            className="w-full rounded-md border border-gray-600 bg-darkHover px-3 py-3 outline-none transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/20"
                             onChange={handleInputChanges}
                             value={currentUser.username}
                             ref={usernameRef}
                         />
-                        <button type="submit" className="mt-2 w-full rounded-md bg-primary px-8 py-3 text-lg font-semibold text-black">Create Room</button>
+                        <button type="submit" className="mt-2 w-full rounded-md bg-primary px-8 py-3 text-lg font-semibold text-black transition-all hover:brightness-110 hover:shadow-lg cursor-pointer">Create Room</button>
                     </form>
                 )}
                 {createdRoom && (
                     <div className="mt-4 w-full rounded-md border border-gray-600 bg-dark p-4">
                         <h3 className="mb-2 font-semibold">Room created</h3>
                         <div className="mb-2">Room Id: <code className="ml-2">{createdRoom.roomId}</code>
-                            <button className="ml-2 underline" onClick={() => navigator.clipboard.writeText(createdRoom.roomId)}>Copy</button>
+                            <button className="ml-2 text-sm text-primary underline transition-colors hover:text-white cursor-pointer" onClick={() => navigator.clipboard.writeText(createdRoom.roomId)}>Copy</button>
                         </div>
                         <div className="mb-3">Password: <code className="ml-2">{createdRoom.password}</code>
-                            <button className="ml-2 underline" onClick={() => navigator.clipboard.writeText(createdRoom.password)}>Copy</button>
+                            <button className="ml-2 text-sm text-primary underline transition-colors hover:text-white cursor-pointer" onClick={() => navigator.clipboard.writeText(createdRoom.password)}>Copy</button>
                         </div>
                         <div className="flex gap-2">
-                            <button className="rounded bg-primary px-4 py-2 text-black" onClick={() => {
+                            <button className="rounded-md bg-primary px-4 py-2 text-black font-medium transition-all hover:brightness-110 hover:shadow-md cursor-pointer" onClick={() => {
                                 // navigate into editor as admin
                                 setStatus(UserStatus.JOINED)
                                 navigate(`/editor/${createdRoom.roomId}`, { state: { username: currentUser.username } })
                             }}>Enter Room</button>
-                            <button className="rounded px-4 py-2 border" onClick={() => setCreatedRoom(null)}>Dismiss</button>
+                            <button className="rounded-md px-4 py-2 border border-gray-500 text-gray-300 transition-all hover:bg-darkHover cursor-pointer" onClick={() => setCreatedRoom(null)}>Dismiss</button>
                         </div>
                     </div>
                 )}
-                <button
-                    className="cursor-pointer select-none underline"
-                    onClick={createNewRoomId}
-                >
-                    Generate Unique Room Id
-                </button>
             </div>
         </div>
     )

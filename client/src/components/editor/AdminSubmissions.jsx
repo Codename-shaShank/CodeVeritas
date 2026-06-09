@@ -99,14 +99,14 @@ function AdminSubmissions() {
       ) : (
         <div className="space-y-2">
           {roomSubmissions.map((s) => (
-            <div key={s.id || s._id} className="p-2 bg-darkHover rounded flex items-center justify-between">
+            <div key={s.id || s._id} className="p-3 bg-darkHover rounded-md flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <div className="font-medium">{s.username}</div>
+                <div className="font-medium text-white">{s.username}</div>
                 <div className="text-xs text-gray-400">{s.language} • {new Date(s.createdAt).toLocaleString()}</div>
-                {s.questionId && <div className="text-xs text-gray-500">Q: {getQuestionText(s.questionId)}</div>}
+                {s.questionId && <div className="text-xs text-gray-500 truncate max-w-[200px] sm:max-w-[300px]" title={getQuestionText(s.questionId)}>Q: {getQuestionText(s.questionId)}</div>}
               </div>
-              <div className="flex items-center gap-2">
-                <button onClick={() => setSelected(s)} className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded">View</button>
+              <div className="flex flex-wrap items-center gap-2">
+                <button onClick={() => setSelected(s)} className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md transition-colors cursor-pointer">View</button>
                 {s.status === 'analyzed' ? (
                   <button onClick={() => {
                     if (s.analysis) {
@@ -114,7 +114,7 @@ function AdminSubmissions() {
                     } else {
                       toast.error('Analysis data not found');
                     }
-                  }} className="text-sm px-2 py-1 rounded bg-green-900 text-green-200 hover:bg-green-800 border border-green-700 transition-colors">View Analysis</button>
+                  }} className="text-sm px-3 py-1.5 rounded-md bg-green-900 text-green-200 hover:bg-green-800 border border-green-700 transition-colors cursor-pointer">View Analysis</button>
                 ) : (
                   // Only show Analyze button if codes have been GENERATED for this question & language
                   (roomGeneratedCodes || []).some(g => g.language === s.language && g.questionId === s.questionId) && (
@@ -130,7 +130,7 @@ function AdminSubmissions() {
                       setAnalyzing(true)
                       socket.emit(ACTIONS.REQUEST_ANALYSIS, { token: currentUser.token, roomId: currentUser.roomId, submissionId: s.id || s._id })
                       toast('Analysis started')
-                    }} className={`text-sm px-2 py-1 rounded ${mlAgentAvailable ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-600 text-gray-400 cursor-not-allowed'}`} disabled={analyzing || !mlAgentAvailable}>{analyzing ? 'Analyzing...' : 'Analyze'}</button>
+                    }} className={`text-sm px-3 py-1.5 rounded-md transition-colors cursor-pointer ${mlAgentAvailable ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-600 text-gray-400 cursor-not-allowed'}`} disabled={analyzing || !mlAgentAvailable}>{analyzing ? 'Analyzing...' : 'Analyze'}</button>
                   )
                 )}
 
@@ -149,7 +149,7 @@ function AdminSubmissions() {
                     setGenerating((prev) => ({ ...prev, [s.language]: true }))
                     socket.emit(ACTIONS.REQUEST_GENERATE, { token: currentUser.token, roomId: currentUser.roomId, language: s.language })
                     toast('Generation queued')
-                  }} className={`text-sm px-2 py-1 rounded ${mlAgentAvailable ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'bg-gray-600 text-gray-400 cursor-not-allowed'}`} disabled={!mlAgentAvailable}>Generate</button>
+                  }} className={`text-sm px-3 py-1.5 rounded-md transition-colors cursor-pointer ${mlAgentAvailable ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'bg-gray-600 text-gray-400 cursor-not-allowed'}`} disabled={!mlAgentAvailable}>Generate</button>
                 )}
                 {/* Show spinner/text if generating */}
                 {generating[s.language] && (
@@ -189,8 +189,8 @@ function AdminSubmissions() {
       {analysisView && (
         <div className="fixed inset-0 z-50 flex flex-col bg-dark overflow-hidden">
           {/* Header with Go Back button */}
-          <div className="bg-darkHover p-4 border-b border-gray-700 flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-white">Code Analysis</h2>
+          <div className="bg-darkHover p-3 sm:p-4 border-b border-gray-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+            <h2 className="text-xl sm:text-2xl font-semibold text-white">Code Analysis</h2>
             <button
               onClick={() => {
                 setAnalysisView(null)
@@ -214,12 +214,12 @@ function AdminSubmissions() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* User Code */}
                   <div className="bg-darkHover rounded-lg p-4 flex flex-col">
-                    <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
+                    <h3 className="text-base sm:text-lg font-semibold text-white mb-2 sm:mb-3 flex items-center">
                       <span className="w-3 h-3 bg-primary rounded-full mr-2"></span>
                       Your Code
                     </h3>
-                    <div className="bg-dark rounded p-4 flex-grow overflow-auto h-[400px]">
-                      <div className="text-sm text-gray-200 font-mono whitespace-pre-wrap">
+                    <div className="bg-dark rounded p-3 sm:p-4 flex-grow overflow-auto h-[250px] sm:h-[300px] lg:h-[400px]">
+                      <div className="text-xs sm:text-sm text-gray-200 font-mono whitespace-pre-wrap">
                         {analysisView?.user_code?.split('\n').map((line, idx) => {
                           const lineNumber = idx + 1;
                           const isMatched = (analysisView?.similar_lines?.[`${activeAITab}_vs_user`] || []).some(m => m.user_line_number === lineNumber);
@@ -237,13 +237,13 @@ function AdminSubmissions() {
 
                   {/* AI Generated Code */}
                   <div className="bg-darkHover rounded-lg p-4 flex flex-col">
-                    <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
+                    <h3 className="text-base sm:text-lg font-semibold text-white mb-2 sm:mb-3 flex items-center">
                       <span className="w-3 h-3 bg-secondary rounded-full mr-2"></span>
                       {activeAITab.charAt(0).toUpperCase() + activeAITab.slice(1)} Code
                     </h3>
 
                     {/* AI Model Tabs */}
-                    <div className="flex space-x-1 mb-4 bg-dark rounded p-1">
+                    <div className="flex flex-wrap gap-1 sm:space-x-1 mb-3 sm:mb-4 bg-dark rounded p-1">
                       {['gemini', 'chatgpt', 'claude'].map((model) => (
                         <button
                           key={model}
@@ -259,8 +259,8 @@ function AdminSubmissions() {
                     </div>
 
                     {/* AI Code Display */}
-                    <div className="bg-dark rounded p-4 flex-grow overflow-auto h-[400px]">
-                      <div className="text-sm text-gray-200 font-mono whitespace-pre-wrap">
+                    <div className="bg-dark rounded p-3 sm:p-4 flex-grow overflow-auto h-[250px] sm:h-[300px] lg:h-[400px]">
+                      <div className="text-xs sm:text-sm text-gray-200 font-mono whitespace-pre-wrap">
                         {(analysisView?.generated_codes?.[activeAITab] || '').split('\n').map((line, idx) => {
                           const lineNumber = idx + 1;
                           const isMatched = (analysisView?.similar_lines?.[`${activeAITab}_vs_user`] || []).some(m => m.ai_line_number === lineNumber);
@@ -279,34 +279,34 @@ function AdminSubmissions() {
 
                 {/* Analysis Summary */}
                 {analysisView?.comparison && (
-                  <div className="bg-darkHover rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-white mb-3">Analysis Summary</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                      <div className="bg-dark p-3 rounded">
-                        <p className="text-gray-400 text-sm">Similarity Score ({activeAITab})</p>
-                        <p className="text-2xl font-bold text-primary">{analysisView.comparison?.similarity_score || 'N/A'}%</p>
+                  <div className="bg-darkHover rounded-lg p-3 sm:p-4">
+                    <h3 className="text-base sm:text-lg font-semibold text-white mb-2 sm:mb-3">Analysis Summary</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">
+                      <div className="bg-dark p-2 sm:p-3 rounded">
+                        <p className="text-gray-400 text-xs sm:text-sm">Similarity Score ({activeAITab})</p>
+                        <p className="text-xl sm:text-2xl font-bold text-primary">{analysisView.comparison?.similarity_score || 'N/A'}%</p>
                       </div>
-                      <div className="bg-dark p-3 rounded">
-                        <p className="text-gray-400 text-sm">Matched Lines</p>
-                        <p className="text-2xl font-bold text-secondary">{analysisView.comparison?.matched_lines || 0}</p>
+                      <div className="bg-dark p-2 sm:p-3 rounded">
+                        <p className="text-gray-400 text-xs sm:text-sm">Matched Lines</p>
+                        <p className="text-xl sm:text-2xl font-bold text-secondary">{analysisView.comparison?.matched_lines || 0}</p>
                       </div>
-                      <div className="bg-dark p-3 rounded">
-                        <p className="text-gray-400 text-sm">Total Lines</p>
-                        <p className="text-2xl font-bold text-gray-300">{analysisView.comparison?.total_lines || 0}</p>
+                      <div className="bg-dark p-2 sm:p-3 rounded col-span-2 md:col-span-1">
+                        <p className="text-gray-400 text-xs sm:text-sm">Total Lines</p>
+                        <p className="text-xl sm:text-2xl font-bold text-gray-300">{analysisView.comparison?.total_lines || 0}</p>
                       </div>
                     </div>
 
                     {/* Detailed Matched Lines */}
                     {analysisView?.similar_lines && (
-                      <div>
-                        <h4 className="text-md font-semibold text-white mb-2">Matched Line Details ({activeAITab})</h4>
-                        <div className="bg-dark p-3 rounded max-h-48 overflow-y-auto">
+                      <div className="mt-2">
+                        <h4 className="text-sm sm:text-md font-semibold text-white mb-2">Matched Line Details ({activeAITab})</h4>
+                        <div className="bg-dark p-2 sm:p-3 rounded max-h-48 overflow-y-auto">
                           {(analysisView.similar_lines[`${activeAITab}_vs_user`] || []).length > 0 ? (
-                            <div className="space-y-1">
+                            <div className="space-y-2">
                               {(analysisView.similar_lines[`${activeAITab}_vs_user`] || []).map((match, idx) => (
-                                <div key={idx} className="text-xs text-gray-300 flex justify-between border-b border-gray-700 pb-1 last:border-0">
-                                  <span>User Line {match.user_line_number}: <span className="text-gray-500 italic">"{match.line_content?.substring(0, 60)}{match.line_content?.length > 60 ? '...' : ''}"</span></span>
-                                  <span className="text-secondary ml-2">matches AI Line {match.ai_line_number}</span>
+                                <div key={idx} className="text-xs text-gray-300 flex flex-col sm:flex-row sm:justify-between border-b border-gray-700 pb-2 last:border-0 gap-1 sm:gap-2">
+                                  <span className="truncate" title={match.line_content}>User Line {match.user_line_number}: <span className="text-gray-500 italic">"{match.line_content?.substring(0, 50)}{match.line_content?.length > 50 ? '...' : ''}"</span></span>
+                                  <span className="text-secondary sm:ml-2 whitespace-nowrap font-semibold">matches AI Line {match.ai_line_number}</span>
                                 </div>
                               ))}
                             </div>

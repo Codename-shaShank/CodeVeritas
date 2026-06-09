@@ -65,7 +65,7 @@ function FileSystem() {
                     return editingFileId !== file.id ? (
                         <div
                             className={
-                                "mb-2 flex rounded-md p-2 hover:bg-darkHover " +
+                                "mb-2 flex cursor-pointer rounded-md p-2 transition-colors hover:bg-darkHover " +
                                 fileSelectedClass(file.id)
                             }
                             key={file.id}
@@ -84,6 +84,7 @@ function FileSystem() {
                             </p>
                             <span className="flex gap-4">
                                 <button
+                                    className="rounded p-1 transition-colors hover:bg-darkHover cursor-pointer"
                                     onClick={(e) =>
                                         handleRenameFile(e, file.id)
                                     }
@@ -94,7 +95,7 @@ function FileSystem() {
                                     onClick={(e) =>
                                         handleDeleteFile(e, file.id, file.name)
                                     }
-                                    className="text-danger"
+                                    className="text-danger rounded p-1 transition-colors hover:bg-red-900/30 cursor-pointer"
                                 >
                                     <MdDelete size={20} />
                                 </button>
@@ -111,7 +112,7 @@ function FileSystem() {
                 })}
             </div>
             <button
-                className="my-2 flex w-full justify-center rounded-md bg-primary p-2 font-bold text-black transition-all"
+                className="my-2 flex w-full justify-center rounded-md bg-primary p-2 font-bold text-black transition-all hover:brightness-110 hover:shadow-md cursor-pointer"
                 onClick={handleCreateNewFile}
             >
                 New File

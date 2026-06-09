@@ -3,7 +3,7 @@ import useAppContext from '@/hooks/useAppContext'
 import toast from 'react-hot-toast'
 
 function AuthComponent() {
-  const { currentUser, setCurrentUser } = useAppContext()
+  const { setCurrentUser, setIsAuthenticated } = useAppContext()
   const [isLogin, setIsLogin] = useState(true)
   const [form, setForm] = useState({ username: '', email: '', password: '' })
   const API_BASE = import.meta.env.VITE_BACKEND_URL || ''
@@ -35,8 +35,17 @@ function AuthComponent() {
         return
       }
       // store token and username in app context and localStorage
-      setCurrentUser({ ...currentUser, id: data.user.id || data.user._id, username: data.user.username, token: data.token, email: data.user.email })
+      setCurrentUser({
+        id: data.user.id || data.user._id,
+        username: data.user.username,
+        token: data.token,
+        email: data.user.email,
+        roomId: '',
+        password: '',
+        isAdmin: false,
+      })
       localStorage.setItem('token', data.token)
+      setIsAuthenticated(true)
       toast.success(isLogin ? 'Logged in' : 'Signed up')
     } catch (err) {
       console.error(err)
@@ -46,17 +55,23 @@ function AuthComponent() {
 
 
   return (
-    <div className="flex w-full max-w-[420px] flex-col items-center justify-center gap-4 p-4 sm:p-8 text-black">
-      <h2 className="text-2xl font-semibold">{isLogin ? 'Login' : 'Sign up'}</h2>
+    <div className="w-full max-w-[440px] rounded-[28px] border border-slate-200 bg-white/95 p-6 text-slate-900 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur sm:p-8">
+      <div className="mb-6">
+        <p className="text-sm font-medium uppercase tracking-[0.22em] text-emerald-600">Code Connect</p>
+        <h2 className="mt-2 text-3xl font-semibold text-slate-900">{isLogin ? 'Login' : 'Sign up'}</h2>
+        <p className="mt-2 text-sm text-slate-500">
+          {isLogin ? 'Welcome back. Sign in to create or join a room.' : 'Create your account to start collaborating.'}
+        </p>
+      </div>
       <form onSubmit={submit} className="flex w-full flex-col gap-3">
         {!isLogin && (
-          <input name="email" placeholder="Email" value={form.email} onChange={handleChange} className="rounded-md p-2 text-black" />
+          <input name="email" placeholder="Email" value={form.email} onChange={handleChange} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100" />
         )}
-        <input name="username" placeholder="Username" value={form.username} onChange={handleChange} className="rounded-md p-2 text-black" />
-        <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} className="rounded-md p-2 text-black" />
-        <button className="mt-2 rounded bg-primary px-4 py-2 text-black font-semibold" type="submit">{isLogin ? 'Login' : 'Sign up'}</button>
+        <input name="username" placeholder="Username" value={form.username} onChange={handleChange} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100" />
+        <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100" />
+        <button className="mt-2 rounded-xl bg-emerald-500 px-4 py-3 font-semibold text-white transition-all hover:bg-emerald-600 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-emerald-200 cursor-pointer" type="submit">{isLogin ? 'Login' : 'Sign up'}</button>
       </form>
-      <button className="mt-2 underline" onClick={() => setIsLogin(!isLogin)}>
+      <button className="mt-4 text-sm font-medium text-slate-500 underline decoration-slate-300 underline-offset-4 transition-colors hover:text-emerald-600 focus:text-emerald-600 focus:outline-none cursor-pointer" onClick={() => setIsLogin(!isLogin)}>
         {isLogin ? 'Create an account' : 'Have an account? Login'}
       </button>
     </div>
